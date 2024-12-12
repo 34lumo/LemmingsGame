@@ -1,0 +1,10 @@
+/CommandException.class
+/CommandExecuteException.class
+/CommandParseException.class
+/FileConfigException.class
+/GameLoadException.class
+/GameModelException.class
+/GameParseException.class
+/ObjectParseException.class
+/OffBoardException.class
+/RoleParseException.class

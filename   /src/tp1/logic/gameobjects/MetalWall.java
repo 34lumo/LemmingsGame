@@ -1,0 +1,78 @@
+package tp1.logic.gameobjects;
+
+import exceptions.ObjectParseException;
+import exceptions.OffBoardException;
+import tp1.logic.GameWorld;
+import tp1.logic.Position;
+import tp1.view.Messages;
+
+public class MetalWall extends GameObject{
+	
+	//NO INTERACTÚA CON NADIE, NI CON EL LEMMING
+	
+	public MetalWall (Position pos, GameWorld game) {
+		super(pos, game);
+	}
+	
+	public MetalWall(MetalWall metal) {
+		super(metal);
+	}
+	
+	@Override
+    public GameObject copy() {
+    	return new MetalWall(this);
+    }
+	
+	MetalWall(){}
+	
+	@Override
+	public boolean isSolid(Position pos) {
+		return true;
+	}
+
+
+	@Override
+	public void update() {
+		
+	}
+
+	@Override
+	public String getIcon() {
+		return Messages.METALWALL;
+	}
+
+	@Override
+	public GameObject parse(String line, GameWorld game) throws ObjectParseException, OffBoardException {
+		String[] words = line.trim().split("\\s+");
+		String nombre = words[1];
+		if(matchObjectName(words[1])) {
+			try {
+				String[] w = words[0].replace("(", " ").replace(",", " ").replace(")", " ").strip().split("( )+");
+				int fila = Integer.parseInt(w[0]);
+				int col = Integer.parseInt(w[1]);
+				Position pos = new Position(col, fila);
+				if(!pos.isInBoard()) {
+					throw new OffBoardException(Messages.OBJECT_OFF_WORLD_POSITION.formatted(line));
+				}
+				if(pos.isInBoard()) {
+					return new MetalWall(pos, game);
+				}
+			}catch (ArrayIndexOutOfBoundsException e1) {
+				throw new ObjectParseException(Messages.INVALID_GAME_OBJECT.formatted(line));
+			}
+			catch (NumberFormatException e2) {
+				throw new ObjectParseException(Messages.INVALID_POSITION.formatted(line));
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public String getName() {
+		return "MetalWall";
+	}
+	
+	
+	
+
+}
